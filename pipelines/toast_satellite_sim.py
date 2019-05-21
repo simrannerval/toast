@@ -204,7 +204,9 @@ def main():
         action="store_true", help="If specified, use libmadam for map-making" )
     parser.add_argument( "--madampar", required=False, default=None,
         help="Madam parameter file" )
-
+    
+    parser.add_argument( "--madam_nodestriping", required=False, default=False,
+        action="store_true", help="If specified, will not use destriping in libmadam" )
     parser.add_argument('--flush',
                         required=False, default=False, action='store_true',
                         help='Flush every print statement.')
