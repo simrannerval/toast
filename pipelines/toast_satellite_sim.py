@@ -835,7 +835,9 @@ def main():
                 data.info(handle)
                 if comm.comm_world.rank == 0:
                     handle.close()
-
+            
+            pars["nodestriping"] = args.madam_nodestriping
+            
             madam = tm.OpMadam(params=pars, detweights=detweights,
                 name="tot_signal")
             madam.exec(data)
