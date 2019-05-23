@@ -205,7 +205,7 @@ def main():
     parser.add_argument( "--madampar", required=False, default=None,
         help="Madam parameter file" )
     
-    parser.add_argument( "--madam_nodestriping", required=False, default=False,
+    parser.add_argument( "--nodestriping", required=False, default=False,
         action="store_true", help="If specified, will not use destriping in libmadam" )
     parser.add_argument('--flush',
                         required=False, default=False, action='store_true',
@@ -836,10 +836,11 @@ def main():
                 if comm.comm_world.rank == 0:
                     handle.close()
             
-            pars["nodestriping"] = args.madam_nodestriping
+            pars["nodestriping"] = args.nodestriping
             
             madam = tm.OpMadam(params=pars, detweights=detweights,
                 name="tot_signal")
+            print("got past OpMadam")
             madam.exec(data)
 
             comm.comm_world.barrier()
