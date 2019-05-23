@@ -163,8 +163,10 @@ class OpMadam(Operator):
         conserve_memory(bool/int): Stagger the Madam buffer staging on node.
         translate_timestamps(bool): Translate timestamps to enforce
             monotonity.
+        nodestriping (bool): if True, turns off destriping
     """
-
+    print('at def __init__')
+    
     def __init__(
         self,
         params={},
@@ -190,8 +192,9 @@ class OpMadam(Operator):
         intervals="intervals",
         conserve_memory=True,
         translate_timestamps=True,
+        nodestriping=False
     ):
-
+        print(params)
         # We call the parent class constructor, which currently does nothing
         super().__init__()
         # madam uses time-based distribution
@@ -247,6 +250,13 @@ class OpMadam(Operator):
             self._verbose = int(params["info"]) > 0
         else:
             self._verbose = True
+        print('before self._nodestriping')
+        self._nodestriping = nodestriping
+        if nodestriping:
+            self.params["nodestriping"] = True
+        else:
+            self.params["nodestriping"] = False
+        print('after self._nodestriping', self.params["nodestriping"])
 
     def __del__(self):
         self._cache.clear()
@@ -313,8 +323,13 @@ class OpMadam(Operator):
 
         # if comm.rank == 0:
         #    data.obs[0]['tod'].cache.report()
+        
 
-        self._destripe(comm, pars, dets, periods, psdinfo)
+        if self.params["nodestriping"]:
+            print('not destriping')
+        else:
+            print('destriping')
+            self._destripe(comm, pars, dets, periods, psdinfo)
 
         self._unstage_data(
             comm,
