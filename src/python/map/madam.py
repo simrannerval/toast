@@ -329,6 +329,7 @@ class OpMadam(Operator):
             print('not destriping')
         else:
             print('destriping')
+            del pars["nodestriping"]
             self._destripe(comm, pars, dets, periods, psdinfo)
 
         self._unstage_data(
