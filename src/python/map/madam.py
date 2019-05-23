@@ -165,7 +165,7 @@ class OpMadam(Operator):
             monotonity.
         nodestriping (bool): if True, turns off destriping
     """
-    print('at def __init__')
+    
     
     def __init__(
         self,
@@ -194,7 +194,7 @@ class OpMadam(Operator):
         translate_timestamps=True,
         nodestriping=False
     ):
-        print(params)
+        
         # We call the parent class constructor, which currently does nothing
         super().__init__()
         # madam uses time-based distribution
@@ -250,9 +250,9 @@ class OpMadam(Operator):
             self._verbose = int(params["info"]) > 0
         else:
             self._verbose = True
-        print('before self._nodestriping')
+        
         self._nodestriping = nodestriping
-        if nodestriping:
+        if params["nodestriping"] == True:
             self.params["nodestriping"] = True
         else:
             self.params["nodestriping"] = False
@@ -327,11 +327,12 @@ class OpMadam(Operator):
 
         if self.params["nodestriping"]:
             print('not destriping')
-        else:
+        elif self.params["nodestriping"] ==  False:
             print('destriping')
             del pars["nodestriping"]
             self._destripe(comm, pars, dets, periods, psdinfo)
-
+        
+            
         self._unstage_data(
             comm,
             data,
